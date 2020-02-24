@@ -18,9 +18,15 @@
   "jsnext:main": "build/index.es.js",
   "scripts": {
     "build": "rollup -c",
+    "build:dev": "cross-env TARGET='dev'      rollup -c",
+    "build:min": "cross-env TARGET='minified' rollup -c",
     "test": "jest",
-    "storybook": "start-storybook -p 9009 -s public",
-    "build-storybook": "build-storybook -s public"
+    "test:watch": "jest --watch",
+    "lint": "tslint -c tslint.json 'src/**/*.tsx'",
+    "lint:fix": "tslint -c tslint.json --fix 'src/**/*.tsx'",
+    "storybook": "cross-env ENV='storybook' start-storybook  -p 9009 -s public",
+    "build-storybook": "build-storybook -s public --output-dir build-storybook",
+    "prepublishOnly": "rm -rf build && npm run build"
   },
   "files": [
     "build"
@@ -57,6 +63,7 @@
     "and": "0.0.3",
     "awesome-typescript-loader": "^5.2.1",
     "babel-cli": "^6.26.0",
+    "cross-env": "^7.0.0",
     "css-loader": "^3.4.2",
     "jest": "^24.9.0",
     "react": "^16.12.0",

@@ -16,8 +16,10 @@ export const _clickOutsideAlerter = () => (
     TO DO
   </div>
 );
+/*
 _clickOutsideAlerter.story = {
   name: "Outside click alerter",
   component: ContainerHeader
 }
 
+*/
