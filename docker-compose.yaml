@@ -1,0 +1,10 @@
+version: "3.7"
+services:
+  storybook-live:
+    build: .
+    restart: always
+    volumes:
+      - ./src:/srv/lib
+    ports:
+      - 9009:9009
+    command: npm run storybook

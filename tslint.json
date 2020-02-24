@@ -1,0 +1,31 @@
+{
+  "defaultSeverity": "warning",
+  "extends": [
+    "tslint:latest",
+    "tslint-react"
+  ],
+  "jsRules": {
+    "no-console": false
+  },
+  "rules": {
+    // Default tslint rules
+    "no-empty-interface": true,
+    "no-for-in": true,
+    "only-arrow-functions": false,
+    "no-console": false,
+    "trailing-comma": false,
+    "no-trailing-whitespace": false,
+    "curly": false, // forces no one-liners if
+    "no-consecutive-blank-lines": false, // allow more than 2 lines to be empty
+    // override tslint-react rules here
+    "jsx-wrap-multiline": false,
+    "jsx-self-close": true,
+    "jsx-alignment": false,
+    "jsx-no-multiline-js": false,
+    "jsx-no-lambda": false,
+    "no-implicit-dependencies": false,
+    "no-submodule-imports": false,
+    "no-shadowed-variable": false
+  },
+  "rulesDirectory": []
+}
