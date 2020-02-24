@@ -6,6 +6,7 @@ import resolve from "rollup-plugin-node-resolve";
 import sass from 'rollup-plugin-sass';
 import { uglify } from "rollup-plugin-uglify";
 import { terser } from "rollup-plugin-terser";
+import postcss from 'rollup-plugin-postcss';
 
 import pkg from "./package.json";
 const input = "src/index.tsx";
@@ -25,12 +26,12 @@ const babelPlugin = babel({
 });
 const typescriptPlugin = typescript({
   rollupCommonJSResolveHack: true,
-  exclude: ["**/tests/**", "**.old**", "**.stories.**"],
-  clean: true
+  tsconfig: "tsconfig.build.json",
+  // clean: false
 });
 const commonjsPlugin = commonjs({
   include: ["node_modules/**"],
-  exclude: ["**/*.stories.js"],
+  exclude: ["**/*.stories.*"],
   namedExports: {
     "node_modules/react/react.js": [
       "Children",
@@ -51,6 +52,7 @@ const builds = [
     input,
     output: { file: pkg.main, format: "cjs", exports: "named", sourcemap: true },
     plugins: [
+      postcss({ extensions: [ '.css' ] }),
       babelPlugin,
       external(),
       resolve(),
@@ -63,6 +65,7 @@ const builds = [
     input,
     output: { file: minifyExtension(pkg.main), format: "cjs", exports: "named" },
     plugins: [
+      postcss({ extensions: [ '.css' ] }),
       babelPlugin,
       external(),
       resolve(),
@@ -75,6 +78,7 @@ const builds = [
     input,
     output: { file: pkg.module, format: "es", exports: "named", sourcemap: true },
     plugins: [
+      postcss({ extensions: [ '.css' ] }),
       babelPlugin,
       external(),
       resolve(),
@@ -87,6 +91,7 @@ const builds = [
     input,
     output: { file: minifyExtension(pkg.module), format: "es", exports: "named" },
     plugins: [
+      postcss({ extensions: [ '.css' ] }),
       babelPlugin,
       external(),
       resolve(),
@@ -107,6 +112,7 @@ const builds = [
       }
     },
     plugins: [
+      postcss({ extensions: [ '.css' ] }),
       babelPlugin,
       external(),
       resolve(),
@@ -126,6 +132,7 @@ const builds = [
       }
     },
     plugins: [
+      postcss({ extensions: [ '.css' ] }),
       babelPlugin,
       external(),
       resolve(),
