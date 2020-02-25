@@ -1,0 +1,21 @@
+.kb-board{
+  border: 1px solid black;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+
+  .kb-header, .kb-body{
+
+  }
+  .kb-header{
+    height: 90px;
+    width: 100%;
+  }
+  .kb-body{
+    flex-grow: 1;
+  }
+}

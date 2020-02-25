@@ -1,0 +1,13 @@
+.kb-board .kb-col{
+  height: 100%;
+  min-width: 240px;
+  border: 1px solid black;
+  display: inline-block;
+  box-sizing: border-box;
+  >div{
+    height: 100%;
+  }
+  .kb-col-body{
+    height: 100%;
+  }
+}

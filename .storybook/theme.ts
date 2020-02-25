@@ -32,7 +32,7 @@ export default create({
  // inputTextColor: 'black',
  // inputBorderRadius: 4,
 
-  brandTitle: 'AGB Components',
-  brandUrl: 'http://agb.mwstudio.ca',
+  brandTitle: 'React Kanban',
+  brandUrl: 'https://github.com/JeanMGirard/react-kanban',
  //  brandImage: './public/agb_couleur_300.png',
 });
