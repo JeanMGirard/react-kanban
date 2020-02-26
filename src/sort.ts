@@ -1,5 +1,4 @@
-import {IKanbanColumn} from "./column/column";
-import {IKanbanCard} from "./card/card";
+import {IKanbanColumn, IKanbanCard} from "./type";
 
 export const reorderColumns = (list: IKanbanColumn[], startIndex: number, endIndex: number) => {
   const result = Array.from(list);

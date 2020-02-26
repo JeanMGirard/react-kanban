@@ -1,5 +1,4 @@
 .kb-board {
-  border: 1px solid black;
   position: relative;
   top: 0;
   left: 0;
@@ -12,7 +11,7 @@
   left: 0;
   height: 100%;
   width: 100%;
-  overflow-x: auto;
+  overflow: auto;
   display: flex;
   flex-direction: column;
 }
@@ -30,5 +29,6 @@
   }
   .kb-body{
     flex-grow: 1;
+    display: block;
   }
 }

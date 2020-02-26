@@ -1,42 +1,15 @@
 import React, {useState} from "react";
 
 import "./column.scss";
-import {
-  DragDropContext,
-  Draggable,
-  DraggableProvided,
-  DraggableStateSnapshot,
-  Droppable,
-  DroppableProvided, DroppableStateSnapshot
-} from "react-beautiful-dnd";
-import {IKanbanCard, KanbanCard} from "../card/card";
-
-
-const grid = 8;
+import { Draggable, DraggableProvided, DraggableStateSnapshot } from "react-beautiful-dnd";
+import {IBoardColumnProps} from "../type";
 
 
 
-const reorder = (list: IKanbanCard[], startIndex: number, endIndex: number) => {
-  const result = Array.from(list);
-  const [removed] = result.splice(startIndex, 1);
-  result.splice(endIndex, 0, removed);
-  return result;
-};
 export const getColumnHeaderStyle = (isDragging: boolean, draggableStyle: any) => ({
-  userSelect: "none",
-  padding: grid * 2,
-  margin: `0 0 0 0`,
-  background: isDragging ? "lightgreen" : "grey",
-  ...draggableStyle
+  margin: `0 0 0 0`, ...draggableStyle
 });
-export interface IKanbanColumn {
-  id: string;
-  cards: IKanbanCard[];
-}
-export interface IBoardColumnProps extends React.HTMLProps<HTMLDivElement>{
-  _: IKanbanColumn,
-  i: number;
-}
+
 export function KbColumnDraggable(props: IBoardColumnProps){
   const {_, i } = props;
 
@@ -47,8 +20,9 @@ export function KbColumnDraggable(props: IBoardColumnProps){
           <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}
                className="kb-col-header"
                style={getColumnHeaderStyle(snapshot.isDragging, provided.draggableProps.style )}>
-            {/*{dropProvided?.placeholder}*/}
-            {/*{dropSnapshot?.draggingOverWith}*/}
+            <div className="kb-col-header-content">
+              {_.header ? _.header : <div>You must put a "header" element</div> }
+            </div>
           </div>
         )}
       </Draggable>

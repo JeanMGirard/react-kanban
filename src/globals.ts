@@ -1,13 +1,13 @@
-import {IKanbanCard} from "./card/card";
-import {IKanbanColumn} from "./column/column";
+import {IKanbanCard, IKanbanColumn} from "./type";
 
 
 export interface IKanbanGlobalProps {
   canChangeCardColumn?: boolean;
+  columns: IKanbanColumn[];
   validateMoveCard?(card: IKanbanCard, oldCol?: IKanbanColumn, newCol?: IKanbanColumn): boolean;
 }
 
-export const getGlobalProps = (props: IKanbanGlobalProps) => {
-  const { canChangeCardColumn, validateMoveCard, ...otherProps } = props;
-  return [{ canChangeCardColumn, validateMoveCard }, otherProps];
+export const getGlobalProps = (props: IKanbanGlobalProps): [IKanbanGlobalProps, any] => {
+  const { canChangeCardColumn, validateMoveCard, columns, ...otherProps } = props;
+  return [{ canChangeCardColumn, validateMoveCard, columns }, otherProps];
 };
