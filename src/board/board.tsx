@@ -1,8 +1,14 @@
-import React, {useState} from "react";
+import React, {useContext, useState} from "react";
 
 import "./board.scss";
-import {KbColumn, IKanbanColumn, getColumnStyle} from "../column/column";
+import {KbColumn, IKanbanColumn } from "../column/column";
 import {DragDropContext, Droppable, Draggable, DropResult, DraggableLocation} from 'react-beautiful-dnd';
+import {KanbanCard} from "..";
+import {KbColumnDraggable} from "../column/column-draggable";
+import {getGlobalProps, IKanbanGlobalProps} from "../globals";
+import {IKanbanCard} from "../card/card";
+import {insertCard, removeCard, reorderCards, reorderColumns} from "../sort";
+import {BoardContext, BoardContextProvider} from "../context";
 
 
 
@@ -10,27 +16,36 @@ import {DragDropContext, Droppable, Draggable, DropResult, DraggableLocation} fr
 export interface IKanbanBoardProps {
   columns?: IKanbanColumn[];
 }
+export class KanbanBoard extends React.Component<IKanbanBoardProps & IKanbanGlobalProps>{
+  constructor(props: IKanbanBoardProps) {
+    super(props);
+  }
+  render(){
+    const [gProps, otherProps] = getGlobalProps(this.props);
+    return (
+      <BoardContextProvider {...gProps}>
+        <KbBoard {...otherProps}/>
+      </BoardContextProvider>
+    )
+  }
+}
+
 
 
 const grid = 8;
 // a little function to help us with reordering the result
-const reorder = (list: IKanbanColumn[], startIndex: number, endIndex: number) => {
-  const result = Array.from(list);
-  const [removed] = result.splice(startIndex, 1);
-  result.splice(endIndex, 0, removed);
-  return result;
-};
-const getBoardStyle = (isDraggingOver: boolean) => ({
-  background: isDraggingOver ? "rgb(230,230,230)" : "rgb(250,250,250)",
-  display: "flex",
-  padding: grid,
-  overflow: "auto"
+
+const getBoardHeaderStyle = (isDraggingOver: boolean) => ({
+  background: isDraggingOver ? "rgb(230,230,230)" : "rgb(250,250,250)"
 });
 
 
 
-export function KanbanBoard(props: IKanbanBoardProps){
-  const [columns, setColumns] = useState<IKanbanColumn[]>(props.columns || []);
+function KbBoard(props: IKanbanBoardProps){
+  const { columns: propsColumns } = props;
+  const bc = useContext(BoardContext);
+
+  const [columns, setColumns] = useState<IKanbanColumn[]>(propsColumns || []);
 
 
   function onDragEnd(result: DropResult) {
@@ -39,38 +54,75 @@ export function KanbanBoard(props: IKanbanBoardProps){
     // did not move anywhere - can bail early
     const source: DraggableLocation = result.source;
     const destination: DraggableLocation = result.destination;
-    if (source.droppableId === destination.droppableId &&
-        source.index === destination.index) {
+
+    // Same destination & source
+    if (source.droppableId === destination.droppableId && source.index === destination.index)
+      return;
+
+
+
+    if (result.type === 'COLUMN') {
+      setColumns(reorderColumns(columns, source.index, destination.index));
       return;
     }
+
+    const destI = columns.findIndex(col => col.id === destination.droppableId);
+    const srcI  = columns.findIndex(col => col.id === source.droppableId);
+
+    // Dropped in other column without cardCanChangeColumn
+    if(srcI !== destI && !bc.canChangeCardColumn)
+      return;
+    // Gave validator
+    else if(bc.validateMoveCard && !bc.validateMoveCard(columns[srcI].cards[source.index], columns[srcI], columns[destI]))
+      return;
+
     // reordering column
-    if (result.type === 'COLUMN') {
-      setColumns(reorder(columns, result.source.index, result.destination.index));
+
+    console.log(result.type);
+    if (result.type.startsWith("CARD")) {
+      let newColumns = columns;
+
+      if(bc.canChangeCardColumn && srcI !== destI){
+        const insertedCard = newColumns[srcI].cards[source.index];
+        newColumns[destI].cards = insertCard(newColumns[destI].cards, insertedCard, destination.index);
+        newColumns[srcI].cards  = removeCard(newColumns[srcI].cards, source.index);
+      }
+      else {
+        newColumns[srcI].cards = reorderCards(newColumns[srcI].cards, source.index, destination.index);
+      }
+      setColumns(newColumns);
     }
   }
 
   return (
     <div className="kb-board">
-      <div className="kb-header">
+      <div className="kb-scroll">
+        <DragDropContext onDragEnd={onDragEnd}>
+          <Droppable
+            droppableId="board"
+            type="COLUMN"
+            direction="horizontal"
+            ignoreContainerClipping={true}
+            isCombineEnabled={false}>
+
+            {(provided, snapshot) => (
+              <div ref={provided.innerRef}
+                   className="kb-header"
+                   placeholder="kb-header"
+                   style={getBoardHeaderStyle(snapshot.isDraggingOver)} {...provided.droppableProps}>
+                {columns.map((column, index) => (
+                  <KbColumnDraggable _={column} key={column.id} i={index}/>
+                ))}
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
+          <div className="kb-body">
+            {columns.map((column, index) => <KbColumn _={column} key={column.id} i={index}/>)}
+          </div>
+        </DragDropContext>
 
       </div>
-      <DragDropContext onDragEnd={onDragEnd}>
-        <Droppable
-          droppableId="board"
-          type="COLUMN"
-          direction="horizontal"
-          ignoreContainerClipping={true}
-          isCombineEnabled={false}>
-
-          {(provided, snapshot) => (
-            <div ref={provided.innerRef} className="kb-body" placeholder="kb-board"
-                 style={getBoardStyle(snapshot.isDraggingOver)} {...provided.droppableProps}>
-              {columns.map((column, index) => <KbColumn _={column} i={index}/>)}
-              {provided.placeholder}
-            </div>
-          )}
-        </Droppable>
-      </DragDropContext>
     </div>
   )
 }

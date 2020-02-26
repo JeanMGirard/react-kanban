@@ -1,19 +1,32 @@
-.kb-board{
+.kb-board {
   border: 1px solid black;
   position: relative;
-  display: flex;
-  flex-direction: column;
   top: 0;
   left: 0;
   height: 100%;
   width: 100%;
+}
+.kb-board .kb-scroll {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  overflow-x: auto;
+  display: flex;
+  flex-direction: column;
+}
 
+
+.kb-board{
   .kb-header, .kb-body{
-
+    box-sizing: border-box;
+    white-space: nowrap;
+    float: left;
   }
   .kb-header{
     height: 90px;
-    width: 100%;
+    padding: 0;
   }
   .kb-body{
     flex-grow: 1;
