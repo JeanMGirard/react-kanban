@@ -31,22 +31,25 @@ const columns: IKanbanColumn[] = [
       { id: "card-1-7",   elem: <div className="kaban-card">card</div> },
       { id: "card-1-8",   elem: <div className="kaban-card">card</div> },
       { id: "card-1-9",   elem: <div className="kaban-card">card</div> },
-      { id: "card-1-10",  elem: <div className="kaban-card">card</div> }
+      { id: "card-1-10",  elem: <div className="kaban-card">card</div> },
+      { id: "card-1-last", locked: true, is_last: true, elem: <div className="kaban-card">Nouveau</div> }
     ]
   },
   { id: "col-2",
-    // type: "",
-    header: <div className="col-header">Hello</div>,
+    type: "action",
+    locked: true,
+    is_last: true,
+    header: <div className="col-header">Nouveau</div>,
     cards: [
-      { id: "card-2-1", elem: <div className="kaban-card">card</div> },
-      { id: "card-2-2", elem: <div className="kaban-card">card</div> }
+      { id: "card-2-1", locked: true, elem: <div className="kaban-card">Nouveau</div> }
     ]
   },
   { id: "col-3", // type: "",
     header: <div className="col-header">Hello</div>,
     cards: [
       { id: "card-3-1", elem: <div className="kaban-card">card</div> },
-      { id: "card-3-2", elem: <div className="kaban-card">card</div> }
+      { id: "card-3-2", elem: <div className="kaban-card">card</div> },
+      { id: "card-3-last", locked: true, is_last: true, elem: <div className="kaban-card">Nouveau</div> }
     ]
   },
   { id: "col-4", // type: "",

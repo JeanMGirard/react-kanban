@@ -86,7 +86,7 @@ function KbBoard(props: IKanbanBoardProps){
       bc.setColumns(newColumns);
     }
   }
-
+  const lI = bc.columns.length - bc.columns.filter(col => col.is_last).length;
   return (
     <div className="kb-board">
       <div className="kb-scroll">
@@ -103,18 +103,35 @@ function KbBoard(props: IKanbanBoardProps){
                    className="kb-header"
                    placeholder="kb-header"
                    style={getBoardHeaderStyle(snapshot.isDraggingOver)} {...provided.droppableProps}>
-                {bc.columns.map((column, index) => (
-                  <KbColumnDraggable _={column} key={column.id} i={index}/>
-                ))}
+                {bc.columns
+                  .filter(col => !col.is_last)
+                  .map((column, index) => (
+                    <KbColumnDraggable _={column} key={column.id} i={index}/>
+                  ))
+                }
+                {bc.columns
+                  .filter(col => col.is_last)
+                  .map((column, index) => (
+                    <KbColumnDraggable _={column} key={column.id} i={lI + index}/>
+                  ))
+                }
                 {provided.placeholder}
               </div>
             )}
+
           </Droppable>
         </DragDropContext>
 
         <div className="kb-body">
           <DragDropContext onDragEnd={onDragEnd}>
-            {bc.columns.map((column, index) => <KbColumn _={column} key={column.id} i={index}/>)}
+            {bc.columns
+              .filter(col => !col.is_last)
+              .map((column, index) => <KbColumn _={column} key={column.id} i={index}/>)
+            }
+            {bc.columns
+              .filter(col => col.is_last)
+              .map((column, index) => <KbColumn _={column} key={column.id} i={index}/>)
+            }
           </DragDropContext>
         </div>
       </div>

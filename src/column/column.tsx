@@ -33,13 +33,23 @@ export function KbColumn(props: IBoardColumnProps){
                  className="kb-col-drop"
                  style={getColumnBodyStyle(snapshot.isDraggingOver)}
                  {...provided.droppableProps}>
-              {_.cards.map((card, index) => (
+              {_.cards
+                .filter(card => (!card.is_last && !card.locked))
+                .map((card, index) => (
                 <KanbanCard _={card} i={index} key={card.id}/>
               ))}
               {provided.placeholder}
             </div>
           )}
         </Droppable>
+        <div className="kb-col-drop" style={{ paddingTop: 0, marginTop: -6 }}>
+          {_.cards
+            .filter(card => (card.is_last && card.locked))
+            .map((card, index) => (
+              <KanbanCard _={card} i={index} key={card.id} has_ctxt={false}/>
+            ))}
+        </div>
+
       </div>
     </div>
   )

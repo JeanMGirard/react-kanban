@@ -15,17 +15,18 @@ export function KbColumnDraggable(props: IBoardColumnProps){
 
   return (
     <>
-      <Draggable  draggableId={_.id} index={i}>
+      <Draggable draggableId={_.id} index={i} isDragDisabled={!!_.locked}>
         {(provided: DraggableProvided, snapshot: DraggableStateSnapshot) => (
           <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}
                className="kb-col-header"
-               style={getColumnHeaderStyle(snapshot.isDragging, provided.draggableProps.style )}>
+               style={getColumnHeaderStyle(snapshot.isDragging, provided.draggableProps.style)}>
             <div className="kb-col-header-content">
-              {_.header ? _.header : <div>You must put a "header" element</div> }
+              {_.header ? _.header : <div>You must put a "header" element</div>}
             </div>
           </div>
         )}
       </Draggable>
+
     </>
   )
 /*
