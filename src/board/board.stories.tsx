@@ -76,8 +76,6 @@ const columns: IKanbanColumn[] = [
 
 export const boardContainer = () => (
   <div style={{
-    width: text("width", "1200px", "container"),
-    height: text("height", "600px", "container"),
     padding: text("padding", "10px", "container")
   }}>
     <KanbanBoard columns={columns}

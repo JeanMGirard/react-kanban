@@ -11792,7 +11792,7 @@ var removeCard = function (list, index) {
     return result;
 };
 
-___$insertStyle(".kb-board {\n  position: relative;\n  top: 0;\n  left: 0;\n  height: 100%;\n  width: 100%;\n}\n\n.kb-board .kb-scroll {\n  position: absolute;\n  top: 0;\n  left: 0;\n  height: 100%;\n  width: 100%;\n  overflow: auto;\n  display: flex;\n  flex-direction: column;\n}\n\n.kb-board .kb-header, .kb-board .kb-body {\n  box-sizing: border-box;\n  white-space: nowrap;\n  float: left;\n  width: 100%;\n}\n.kb-board .kb-header {\n  height: 90px;\n  padding: 0;\n}\n.kb-board .kb-body {\n  flex-grow: 1;\n  display: block;\n}");
+___$insertStyle(".kb-board {\n  position: relative;\n  top: 0;\n  left: 0;\n  height: 100%;\n  width: 100%;\n}\n\n.kb-board .kb-scroll {\n  position: absolute;\n  top: 0;\n  left: 0;\n  height: 100%;\n  width: 100%;\n  display: flex;\n  flex-direction: column;\n}\n\n.kb-board .kb-header, .kb-board .kb-body {\n  box-sizing: border-box;\n  white-space: nowrap;\n  float: left;\n  width: calc(100% + 140px);\n}\n.kb-board .kb-header {\n  height: 90px;\n  padding: 0;\n}\n.kb-board .kb-body {\n  flex-grow: 1;\n  display: block;\n}");
 
 var KanbanBoard = /** @class */ (function (_super) {
     __extends(KanbanBoard, _super);

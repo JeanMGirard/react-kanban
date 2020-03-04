@@ -11,7 +11,7 @@
   left: 0;
   height: 100%;
   width: 100%;
-  overflow: auto;
+  // overflow: auto;
   display: flex;
   flex-direction: column;
 }
@@ -22,7 +22,7 @@
     box-sizing: border-box;
     white-space: nowrap;
     float: left;
-    width: 100%;
+    width: calc(100% + 140px);
   }
   .kb-header{
     height: 90px;
