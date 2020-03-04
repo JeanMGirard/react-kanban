@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React from "react";
 
 import "./column.scss";
 import { Draggable, DraggableProvided, DraggableStateSnapshot } from "react-beautiful-dnd";

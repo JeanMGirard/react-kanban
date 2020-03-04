@@ -1,12 +1,11 @@
 import React, {useContext, useState} from "react";
 
-import "./column.scss";
 import { Droppable } from "react-beautiful-dnd";
 import { KanbanCard } from "..";
 import { BoardContext } from "../context";
 import { IKanbanColumn } from "../type";
 
-
+import "./column.scss";
 
 const getColumnBodyStyle = (isDraggingOver: boolean) => ({
     background: isDraggingOver ? "rgba(230,230,230, 0.7)" : "rgba(250,250,250, 0.3)"

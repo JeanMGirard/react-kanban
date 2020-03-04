@@ -1,8 +1,7 @@
 import React, {useContext, useState} from "react";
+import {DragDropContext, Droppable, DropResult, DraggableLocation} from 'react-beautiful-dnd';
 
-import "./board.scss";
 import {KbColumn } from "../column/column";
-import {DragDropContext, Droppable, Draggable, DropResult, DraggableLocation} from 'react-beautiful-dnd';
 import {KbColumnDraggable} from "../column/column-draggable";
 import {getGlobalProps, IKanbanGlobalProps} from "../globals";
 import {insertCard, removeCard, reorderCards, reorderColumns} from "../sort";
@@ -10,6 +9,7 @@ import {BoardContext, BoardContextProvider} from "../context";
 import {IKanbanColumn} from "..";
 
 
+import "./board.scss";
 
 
 export interface IKanbanBoardProps {

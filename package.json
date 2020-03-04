@@ -15,6 +15,7 @@
   },
   "main": "build/index.js",
   "module": "build/index.es.js",
+  "browser": "build/index.umd.js",
   "jsnext:main": "build/index.es.js",
   "scripts": {
     "build": "rollup -c",
@@ -77,6 +78,7 @@
     "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-peer-deps-external": "^2.2.2",
+    "rollup-plugin-postcss": "^2.1.1",
     "rollup-plugin-sass": "^1.2.2",
     "rollup-plugin-terser": "^5.2.0",
     "rollup-plugin-typescript2": "^0.26.0",

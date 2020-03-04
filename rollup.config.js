@@ -39,8 +39,10 @@ const commonjsPlugin = commonjs({
       "PropTypes",
       "createElement"
     ],
-    "node_modules/esrever/esrever.js": ["reverse"],
-    "node_modules/react-dom/index.js": ["render"]
+    'node_modules/react-is/index.js': [
+      'isValidElementType',
+      'isContextConsumer'
+    ]
   }
 });
 const sassPlugin = sass({
