@@ -57,6 +57,7 @@ function KbBoard(props: IKanbanBoardProps){
 
 
     if (result.type === 'COLUMN') {
+      if(bc.onMoveCol && bc.onMoveCol(bc.columns[source.index], destination.index))
       bc.setColumns(reorderColumns(bc.columns, source.index, destination.index));
       return;
     }
@@ -68,7 +69,7 @@ function KbBoard(props: IKanbanBoardProps){
     if(srcI !== destI && !bc.canChangeCardColumn)
       return;
     // Gave validator
-    else if(bc.validateMoveCard && !bc.validateMoveCard(bc.columns[srcI].cards[source.index], bc.columns[srcI], bc.columns[destI]))
+    else if(bc.onMoveCard && !bc.onMoveCard(bc.columns[srcI].cards[source.index], bc.columns[srcI], bc.columns[destI]))
       return;
 
     // reordering column
@@ -95,17 +96,14 @@ function KbBoard(props: IKanbanBoardProps){
             droppableId="board"
             type="COLUMN"
             direction="horizontal"
-            ignoreContainerClipping={true}
+            ignoreContainerClipping={false}
             isCombineEnabled={false}>
 
             {(provided, snapshot) => (
               <div ref={provided.innerRef}
                    className="kb-header"
                    placeholder="kb-header"
-                   style={{
-                     ...getBoardHeaderStyle(snapshot.isDraggingOver),
-
-                   }}
+                   style={getBoardHeaderStyle(snapshot.isDraggingOver)}
                    {...provided.droppableProps}>
                 {bc.columns
                   .filter(col => (!col.is_last))

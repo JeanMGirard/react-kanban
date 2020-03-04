@@ -5,7 +5,8 @@ export declare type IBoardContext = {
     setColumns: (columns: IKanbanColumn[]) => void;
     columns: IKanbanColumn[];
     canChangeCardColumn?: boolean;
-    validateMoveCard?(card: IKanbanCard, oldCol?: IKanbanColumn, newCol?: IKanbanColumn): boolean;
+    onMoveCard?(card: IKanbanCard, oldCol?: IKanbanColumn, newCol?: IKanbanColumn): boolean;
+    onMoveCol?(col: IKanbanColumn, index: number): boolean;
 };
 export declare const BoardContext: React.Context<IBoardContext>;
 export declare class BoardContextProvider extends React.Component<IKanbanGlobalProps, IBoardContext> {

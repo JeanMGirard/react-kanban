@@ -11679,7 +11679,8 @@ var BoardContextProvider = /** @class */ (function (_super) {
             columns: props.columns,
             setColumns: _this.setColumns,
             canChangeCardColumn: !!props.canChangeCardColumn,
-            validateMoveCard: props.validateMoveCard
+            onMoveCard: props.onMoveCard,
+            onMoveCol: props.onMoveCol
         };
         return _this;
     }
@@ -11689,7 +11690,8 @@ var BoardContextProvider = /** @class */ (function (_super) {
         var changed;
         switch (true) {
             case (prevProps.canChangeCardColumn !== this.props.canChangeCardColumn):
-            case (prevProps.validateMoveCard !== this.props.validateMoveCard):
+            case (prevProps.onMoveCol !== this.props.onMoveCol):
+            case (prevProps.onMoveCard !== this.props.onMoveCard):
                 changed = true;
                 break;
             default:
@@ -11699,7 +11701,8 @@ var BoardContextProvider = /** @class */ (function (_super) {
         if (changed) {
             this.setState({
                 canChangeCardColumn: !!this.props.canChangeCardColumn,
-                validateMoveCard: this.props.validateMoveCard
+                onMoveCard: this.props.onMoveCard,
+                onMoveCol: this.props.onMoveCol
             });
         }
     };
@@ -11773,8 +11776,8 @@ function KbColumnDraggable(props) {
 }
 
 var getGlobalProps = function (props) {
-    var canChangeCardColumn = props.canChangeCardColumn, validateMoveCard = props.validateMoveCard, columns = props.columns, otherProps = __rest(props, ["canChangeCardColumn", "validateMoveCard", "columns"]);
-    return [{ canChangeCardColumn: canChangeCardColumn, validateMoveCard: validateMoveCard, columns: columns }, otherProps];
+    var canChangeCardColumn = props.canChangeCardColumn, onMoveCard = props.onMoveCard, onMoveCol = props.onMoveCol, columns = props.columns, otherProps = __rest(props, ["canChangeCardColumn", "onMoveCard", "onMoveCol", "columns"]);
+    return [{ canChangeCardColumn: canChangeCardColumn, onMoveCard: onMoveCard, onMoveCol: onMoveCol, columns: columns }, otherProps];
 };
 
 var reorderColumns = function (list, startIndex, endIndex) {
@@ -11831,7 +11834,8 @@ function KbBoard(props) {
         if (source.droppableId === destination.droppableId && source.index === destination.index)
             return;
         if (result.type === 'COLUMN') {
-            bc.setColumns(reorderColumns(bc.columns, source.index, destination.index));
+            if (bc.onMoveCol && bc.onMoveCol(bc.columns[source.index], destination.index))
+                bc.setColumns(reorderColumns(bc.columns, source.index, destination.index));
             return;
         }
         var destI = bc.columns.findIndex(function (col) { return col.id === destination.droppableId; });
@@ -11840,7 +11844,7 @@ function KbBoard(props) {
         if (srcI !== destI && !bc.canChangeCardColumn)
             return;
         // Gave validator
-        else if (bc.validateMoveCard && !bc.validateMoveCard(bc.columns[srcI].cards[source.index], bc.columns[srcI], bc.columns[destI]))
+        else if (bc.onMoveCard && !bc.onMoveCard(bc.columns[srcI].cards[source.index], bc.columns[srcI], bc.columns[destI]))
             return;
         // reordering column
         if (result.type.startsWith("CARD")) {
@@ -11860,7 +11864,7 @@ function KbBoard(props) {
     return (React__default.createElement("div", { className: "kb-board" },
         React__default.createElement("div", { className: "kb-scroll" },
             React__default.createElement(DragDropContext, { onDragEnd: onDragEnd },
-                React__default.createElement(ConnectedDroppable, { droppableId: "board", type: "COLUMN", direction: "horizontal", ignoreContainerClipping: true, isCombineEnabled: false }, function (provided, snapshot) { return (React__default.createElement("div", __assign({ ref: provided.innerRef, className: "kb-header", placeholder: "kb-header", style: __assign({}, getBoardHeaderStyle(snapshot.isDraggingOver)) }, provided.droppableProps),
+                React__default.createElement(ConnectedDroppable, { droppableId: "board", type: "COLUMN", direction: "horizontal", ignoreContainerClipping: false, isCombineEnabled: false }, function (provided, snapshot) { return (React__default.createElement("div", __assign({ ref: provided.innerRef, className: "kb-header", placeholder: "kb-header", style: getBoardHeaderStyle(snapshot.isDraggingOver) }, provided.droppableProps),
                     bc.columns
                         .filter(function (col) { return (!col.is_last); })
                         .map(function (column, index) { return (React__default.createElement(KbColumnDraggable, { _: column, key: column.id, i: index })); }),

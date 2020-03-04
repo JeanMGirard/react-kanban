@@ -6,7 +6,8 @@ export type IBoardContext = {
   setColumns: (columns: IKanbanColumn[])=>void
   columns: IKanbanColumn[];
   canChangeCardColumn?: boolean;
-  validateMoveCard?(card: IKanbanCard, oldCol?: IKanbanColumn, newCol?: IKanbanColumn): boolean;
+  onMoveCard?(card: IKanbanCard, oldCol?: IKanbanColumn, newCol?: IKanbanColumn): boolean;
+  onMoveCol?(col: IKanbanColumn, index: number): boolean;
 }
 
 export const BoardContext = React.createContext<IBoardContext>({
@@ -21,7 +22,8 @@ export class BoardContextProvider extends React.Component<IKanbanGlobalProps, IB
       columns: props.columns,
       setColumns: this.setColumns,
       canChangeCardColumn: !!props.canChangeCardColumn,
-      validateMoveCard: props.validateMoveCard
+      onMoveCard: props.onMoveCard,
+      onMoveCol: props.onMoveCol
     }
   }
   componentDidUpdate(prevProps: Readonly<IKanbanGlobalProps>, prevState: Readonly<IBoardContext>, snapshot?: any): void {
@@ -30,7 +32,8 @@ export class BoardContextProvider extends React.Component<IKanbanGlobalProps, IB
 
     switch (true) {
       case (prevProps.canChangeCardColumn !== this.props.canChangeCardColumn):
-      case (prevProps.validateMoveCard !== this.props.validateMoveCard):
+      case (prevProps.onMoveCol !== this.props.onMoveCol):
+      case (prevProps.onMoveCard !== this.props.onMoveCard):
         changed = true;
         break;
       default:
@@ -41,7 +44,8 @@ export class BoardContextProvider extends React.Component<IKanbanGlobalProps, IB
     if(changed) {
       this.setState({
         canChangeCardColumn: !!this.props.canChangeCardColumn,
-        validateMoveCard: this.props.validateMoveCard
+        onMoveCard: this.props.onMoveCard,
+        onMoveCol: this.props.onMoveCol
       })
     }
   }

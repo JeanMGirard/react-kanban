@@ -82,7 +82,8 @@ export const boardContainer = () => (
     padding: text("padding", "10px", "container")
   }}>
     <KanbanBoard columns={columns}
-                 // validateMoveCard={(card, col1, col2) => true}
+                 onMoveCol={(col, index) => true}
+                 onMoveCard={(card, col1, col2) => true}
                  canChangeCardColumn={true}
     />
   </div>
