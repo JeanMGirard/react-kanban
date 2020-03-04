@@ -34,7 +34,7 @@ export function KbColumn(props: IBoardColumnProps){
                  style={getColumnBodyStyle(snapshot.isDraggingOver)}
                  {...provided.droppableProps}>
               {_.cards
-                .filter(card => (!card.is_last && !card.locked))
+                .filter(card => !(card.is_last && card.locked))
                 .map((card, index) => (
                 <KanbanCard _={card} i={index} key={card.id}/>
               ))}

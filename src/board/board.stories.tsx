@@ -39,9 +39,9 @@ const columns: IKanbanColumn[] = [
     type: "action",
     locked: true,
     is_last: true,
-    header: <div className="col-header">Nouveau</div>,
+    header: <div className="col-header">LAST_LOCKED</div>,
     cards: [
-      { id: "card-2-1", locked: true, elem: <div className="kaban-card">Nouveau</div> }
+      { id: "card-2-1", locked: true, elem: <div className="kaban-card">LAST_LOCKED</div> }
     ]
   },
   { id: "col-3", // type: "",

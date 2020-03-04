@@ -13,8 +13,11 @@ export const getColumnHeaderStyle = (isDragging: boolean, draggableStyle: any) =
 export function KbColumnDraggable(props: IBoardColumnProps){
   const {_, i } = props;
 
+  const noDrop = false; //_.locked && _.is_last;
+
   return (
     <>
+      {!noDrop &&
       <Draggable draggableId={_.id} index={i} isDragDisabled={!!_.locked}>
         {(provided: DraggableProvided, snapshot: DraggableStateSnapshot) => (
           <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}
@@ -26,7 +29,14 @@ export function KbColumnDraggable(props: IBoardColumnProps){
           </div>
         )}
       </Draggable>
-
+      }
+      {noDrop &&
+      <div className="kb-col-header">
+        <div className="kb-col-header-content">
+          {_.header ? _.header : <div>You must put a "header" element</div>}
+        </div>
+      </div>
+      }
     </>
   )
 /*

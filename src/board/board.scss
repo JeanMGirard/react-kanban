@@ -23,11 +23,15 @@
     box-sizing: border-box;
     white-space: nowrap;
     float: left;
-    width: calc(100% + 140px);
+    min-width: 100%;
   }
-  .kb-header{
+  .kb-header,
+  .kb-header-lasts-locked{
     height: 90px;
     padding: 0;
+  }
+  .kb-header-lasts-locked{
+
   }
   .kb-body{
     flex-grow: 1;
