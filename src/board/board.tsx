@@ -57,8 +57,9 @@ function KbBoard(props: IKanbanBoardProps){
 
 
     if (result.type === 'COLUMN') {
+      if(!bc.onMoveCol) bc.setColumns(reorderColumns(bc.columns, source.index, destination.index));
       if(bc.onMoveCol && bc.onMoveCol(bc.columns[source.index], destination.index))
-      bc.setColumns(reorderColumns(bc.columns, source.index, destination.index));
+        bc.setColumns(reorderColumns(bc.columns, source.index, destination.index));
       return;
     }
 
@@ -69,7 +70,7 @@ function KbBoard(props: IKanbanBoardProps){
     if(srcI !== destI && !bc.canChangeCardColumn)
       return;
     // Gave validator
-    else if(bc.onMoveCard && !bc.onMoveCard(bc.columns[srcI].cards[source.index], bc.columns[srcI], bc.columns[destI]))
+    else if(bc.onMoveCard && !bc.onMoveCard(bc.columns[srcI].cards[source.index], bc.columns[srcI], bc.columns[destI], destination.index))
       return;
 
     // reordering column
@@ -106,15 +107,8 @@ function KbBoard(props: IKanbanBoardProps){
                    style={getBoardHeaderStyle(snapshot.isDraggingOver)}
                    {...provided.droppableProps}>
                 {bc.columns
-                  .filter(col => (!col.is_last))
                   .map((column, index) => (
                     <KbColumnDraggable _={column} key={column.id} i={index}/>
-                  ))
-                }
-                {bc.columns
-                  .filter(col => (col.is_last))
-                  .map((column, index) => (
-                    <KbColumnDraggable _={column} key={column.id} i={lI + index}/>
                   ))
                 }
                 {provided.placeholder}

@@ -11666,8 +11666,41 @@ var ConnectedDroppable = connect(makeMapStateToProps$1, mapDispatchToProps$1, nu
 })(Droppable);
 ConnectedDroppable.defaultProps = defaultProps;
 
+var reorderColumnsByLast = function (list) {
+    return list.sort(function (col1, col2) {
+        if (col1.is_last)
+            return 1;
+        else if (col2.is_last)
+            return -1;
+        return 0;
+    });
+};
+var reorderColumns = function (list, startIndex, endIndex) {
+    var result = Array.from(list);
+    var removed = result.splice(startIndex, 1)[0];
+    result.splice(endIndex, 0, removed);
+    return reorderColumnsByLast(result);
+};
+var reorderCards = function (list, startIndex, endIndex) {
+    var result = Array.from(list);
+    var removed = result.splice(startIndex, 1)[0];
+    result.splice(endIndex, 0, removed);
+    return result;
+};
+var insertCard = function (list, newCard, index) {
+    var result = Array.from(list);
+    result.splice(index, 0, newCard);
+    return result;
+};
+var removeCard = function (list, index) {
+    var result = Array.from(list);
+    result.splice(index, 1);
+    return result;
+};
+
 var BoardContext = React__default.createContext({
     columns: [],
+    refresh: 0,
     setColumns: function (columns) { return null; }
 });
 var BoardContextProvider = /** @class */ (function (_super) {
@@ -11676,7 +11709,8 @@ var BoardContextProvider = /** @class */ (function (_super) {
         var _this = _super.call(this, props) || this;
         _this.setColumns = _this.setColumns.bind(_this);
         _this.state = {
-            columns: props.columns,
+            refresh: props.refresh || 0,
+            columns: reorderColumnsByLast(props.columns),
             setColumns: _this.setColumns,
             canChangeCardColumn: !!props.canChangeCardColumn,
             onMoveCard: props.onMoveCard,
@@ -11703,6 +11737,12 @@ var BoardContextProvider = /** @class */ (function (_super) {
                 canChangeCardColumn: !!this.props.canChangeCardColumn,
                 onMoveCard: this.props.onMoveCard,
                 onMoveCol: this.props.onMoveCol
+            });
+        }
+        else if (prevProps.refresh !== this.props.refresh) {
+            this.setState({
+                refresh: this.props.refresh,
+                columns: this.props.columns
             });
         }
     };
@@ -11780,29 +11820,6 @@ var getGlobalProps = function (props) {
     return [{ canChangeCardColumn: canChangeCardColumn, onMoveCard: onMoveCard, onMoveCol: onMoveCol, columns: columns }, otherProps];
 };
 
-var reorderColumns = function (list, startIndex, endIndex) {
-    var result = Array.from(list);
-    var removed = result.splice(startIndex, 1)[0];
-    result.splice(endIndex, 0, removed);
-    return result;
-};
-var reorderCards = function (list, startIndex, endIndex) {
-    var result = Array.from(list);
-    var removed = result.splice(startIndex, 1)[0];
-    result.splice(endIndex, 0, removed);
-    return result;
-};
-var insertCard = function (list, newCard, index) {
-    var result = Array.from(list);
-    result.splice(index, 0, newCard);
-    return result;
-};
-var removeCard = function (list, index) {
-    var result = Array.from(list);
-    result.splice(index, 1);
-    return result;
-};
-
 ___$insertStyle(".kb-board {\n  position: relative;\n  top: 0;\n  left: 0;\n  height: 100%;\n  width: 100%;\n  text-align: left;\n}\n\n.kb-board .kb-scroll {\n  position: absolute;\n  top: 0;\n  left: 0;\n  height: 100%;\n  width: 100%;\n  display: flex;\n  flex-direction: column;\n}\n\n.kb-board .kb-header, .kb-board .kb-body {\n  box-sizing: border-box;\n  white-space: nowrap;\n  float: left;\n  min-width: 100%;\n}\n.kb-board .kb-header,\n.kb-board .kb-header-lasts-locked {\n  height: 90px;\n  padding: 0;\n}\n.kb-board .kb-body {\n  flex-grow: 1;\n  display: block;\n}");
 
 var KanbanBoard = /** @class */ (function (_super) {
@@ -11834,6 +11851,8 @@ function KbBoard(props) {
         if (source.droppableId === destination.droppableId && source.index === destination.index)
             return;
         if (result.type === 'COLUMN') {
+            if (!bc.onMoveCol)
+                bc.setColumns(reorderColumns(bc.columns, source.index, destination.index));
             if (bc.onMoveCol && bc.onMoveCol(bc.columns[source.index], destination.index))
                 bc.setColumns(reorderColumns(bc.columns, source.index, destination.index));
             return;
@@ -11844,7 +11863,7 @@ function KbBoard(props) {
         if (srcI !== destI && !bc.canChangeCardColumn)
             return;
         // Gave validator
-        else if (bc.onMoveCard && !bc.onMoveCard(bc.columns[srcI].cards[source.index], bc.columns[srcI], bc.columns[destI]))
+        else if (bc.onMoveCard && !bc.onMoveCard(bc.columns[srcI].cards[source.index], bc.columns[srcI], bc.columns[destI], destination.index))
             return;
         // reordering column
         if (result.type.startsWith("CARD")) {
@@ -11866,11 +11885,7 @@ function KbBoard(props) {
             React__default.createElement(DragDropContext, { onDragEnd: onDragEnd },
                 React__default.createElement(ConnectedDroppable, { droppableId: "board", type: "COLUMN", direction: "horizontal", ignoreContainerClipping: false, isCombineEnabled: false }, function (provided, snapshot) { return (React__default.createElement("div", __assign({ ref: provided.innerRef, className: "kb-header", placeholder: "kb-header", style: getBoardHeaderStyle(snapshot.isDraggingOver) }, provided.droppableProps),
                     bc.columns
-                        .filter(function (col) { return (!col.is_last); })
                         .map(function (column, index) { return (React__default.createElement(KbColumnDraggable, { _: column, key: column.id, i: index })); }),
-                    bc.columns
-                        .filter(function (col) { return (col.is_last); })
-                        .map(function (column, index) { return (React__default.createElement(KbColumnDraggable, { _: column, key: column.id, i: lI + index })); }),
                     provided.placeholder)); })),
             React__default.createElement("div", { className: "kb-body" },
                 React__default.createElement(DragDropContext, { onDragEnd: onDragEnd },

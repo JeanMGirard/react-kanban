@@ -18,16 +18,16 @@
   "browser": "build/index.umd.js",
   "jsnext:main": "build/index.es.js",
   "scripts": {
-    "build": "rollup -c",
-    "build:dev": "cross-env TARGET='dev'      rollup -c",
-    "build:min": "cross-env TARGET='minified' rollup -c",
-    "test": "jest",
+    "build":      "rollup -c",
+    "build:dev":  "cross-env TARGET='dev'      rollup -c",
+    "build:min":  "cross-env TARGET='minified' rollup -c",
+    "test":       "jest",
     "test:watch": "jest --watch",
-    "lint": "tslint -c tslint.json 'src/**/*.tsx'",
-    "lint:fix": "tslint -c tslint.json --fix 'src/**/*.tsx'",
-    "storybook": "start-storybook  -p 9010 -s public",
-    "build-storybook": "build-storybook -s public --output-dir build-storybook",
-    "prepublishOnly": "rm -rf build && npm run build"
+    "lint":       "tslint -c tslint.json 'src/**/*.tsx'",
+    "lint:fix":   "tslint -c tslint.json --fix 'src/**/*.tsx'",
+    "storybook":  "start-storybook  -p 9010 -s public",
+    "build-storybook":  "build-storybook -s public --output-dir build-storybook",
+    "prepublishOnly":   "rm -rf build && npm run build"
   },
   "files": [
     "build"

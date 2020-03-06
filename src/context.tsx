@@ -1,17 +1,20 @@
 import React from "react";
 import {IKanbanGlobalProps} from "./globals";
 import {IKanbanCard, IKanbanColumn} from "./type";
+import {reorderColumnsByLast} from "./sort";
 
 export type IBoardContext = {
   setColumns: (columns: IKanbanColumn[])=>void
   columns: IKanbanColumn[];
   canChangeCardColumn?: boolean;
-  onMoveCard?(card: IKanbanCard, oldCol?: IKanbanColumn, newCol?: IKanbanColumn): boolean;
+  onMoveCard?(card: IKanbanCard, oldCol?: IKanbanColumn, newCol?: IKanbanColumn, destI?: number): boolean;
   onMoveCol?(col: IKanbanColumn, index: number): boolean;
+  refresh?: number;
 }
 
 export const BoardContext = React.createContext<IBoardContext>({
   columns: [],
+  refresh: 0,
   setColumns: (columns: IKanbanColumn[]) => null
 });
 export class BoardContextProvider extends React.Component<IKanbanGlobalProps, IBoardContext>{
@@ -19,7 +22,8 @@ export class BoardContextProvider extends React.Component<IKanbanGlobalProps, IB
     super(props);
     this.setColumns = this.setColumns.bind(this);
     this.state = {
-      columns: props.columns,
+      refresh: props.refresh || 0,
+      columns: reorderColumnsByLast(props.columns),
       setColumns: this.setColumns,
       canChangeCardColumn: !!props.canChangeCardColumn,
       onMoveCard: props.onMoveCard,
@@ -48,6 +52,12 @@ export class BoardContextProvider extends React.Component<IKanbanGlobalProps, IB
         onMoveCol: this.props.onMoveCol
       })
     }
+    else if(prevProps.refresh !== this.props.refresh){
+      this.setState( {
+        refresh: this.props.refresh,
+        columns: this.props.columns
+      })
+    }
   }
 
   render(){
@@ -58,6 +68,6 @@ export class BoardContextProvider extends React.Component<IKanbanGlobalProps, IB
     )
   }
   setColumns(columns: IKanbanColumn[]) {
-    this.setState({columns})
+    this.setState({ columns })
   }
 }
