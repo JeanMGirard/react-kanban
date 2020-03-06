@@ -16,21 +16,29 @@ export interface IKanbanBoardProps {
   columns: IKanbanColumn[];
   headerHeight?: number;
 }
-export class KanbanBoard extends React.Component<IKanbanBoardProps & IKanbanGlobalProps>{
+export class KanbanBoard extends React.Component<IKanbanBoardProps & IKanbanGlobalProps, any>{
   constructor(props: IKanbanBoardProps) {
     super(props);
+    const [gProps, otherProps] = getGlobalProps(props);
+    this.state = {
+      gProps,
+      otherProps
+    }
   }
   render(){
-    const [gProps, otherProps] = getGlobalProps(this.props);
     return (
-      <BoardContextProvider {...gProps}>
-        <KbBoard {...otherProps}/>
+      <BoardContextProvider {...this.state.gProps}>
+        <KbBoard {...this.state.otherProps}/>
       </BoardContextProvider>
     )
   }
   componentDidUpdate(prevProps: Readonly<IKanbanBoardProps & IKanbanGlobalProps>, prevState: Readonly<{}>, snapshot?: any): void {
     if(prevProps.refresh !== this.props.refresh){
-      console.log("changed?");
+      const [gProps, otherProps] = getGlobalProps(this.props);
+      this.setState({
+        gProps,
+        otherProps
+      });
     }
   }
 }

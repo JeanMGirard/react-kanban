@@ -11825,16 +11825,25 @@ ___$insertStyle(".kb-board {\n  position: relative;\n  top: 0;\n  left: 0;\n  he
 var KanbanBoard = /** @class */ (function (_super) {
     __extends(KanbanBoard, _super);
     function KanbanBoard(props) {
-        return _super.call(this, props) || this;
+        var _this = _super.call(this, props) || this;
+        var _a = getGlobalProps(props), gProps = _a[0], otherProps = _a[1];
+        _this.state = {
+            gProps: gProps,
+            otherProps: otherProps
+        };
+        return _this;
     }
     KanbanBoard.prototype.render = function () {
-        var _a = getGlobalProps(this.props), gProps = _a[0], otherProps = _a[1];
-        return (React__default.createElement(BoardContextProvider, __assign({}, gProps),
-            React__default.createElement(KbBoard, __assign({}, otherProps))));
+        return (React__default.createElement(BoardContextProvider, __assign({}, this.state.gProps),
+            React__default.createElement(KbBoard, __assign({}, this.state.otherProps))));
     };
     KanbanBoard.prototype.componentDidUpdate = function (prevProps, prevState, snapshot) {
         if (prevProps.refresh !== this.props.refresh) {
-            console.log("changed?");
+            var _a = getGlobalProps(this.props), gProps = _a[0], otherProps = _a[1];
+            this.setState({
+                gProps: gProps,
+                otherProps: otherProps
+            });
         }
     };
     return KanbanBoard;
