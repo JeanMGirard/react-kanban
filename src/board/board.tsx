@@ -14,6 +14,7 @@ import "./board.scss";
 
 export interface IKanbanBoardProps {
   columns: IKanbanColumn[];
+  headerHeight?: number;
 }
 export class KanbanBoard extends React.Component<IKanbanBoardProps & IKanbanGlobalProps>{
   constructor(props: IKanbanBoardProps) {
@@ -34,13 +35,12 @@ export class KanbanBoard extends React.Component<IKanbanBoardProps & IKanbanGlob
 const grid = 8;
 // a little function to help us with reordering the result
 
-const getBoardHeaderStyle = (isDraggingOver: boolean) => ({
-  background: isDraggingOver ? "rgb(230,230,230)" : "rgb(250,250,250)"
-});
+
 
 
 
 function KbBoard(props: IKanbanBoardProps){
+  const { headerHeight } = props;
   const bc = useContext(BoardContext);
 
   function onDragEnd(result: DropResult) {
@@ -88,6 +88,13 @@ function KbBoard(props: IKanbanBoardProps){
       bc.setColumns(newColumns);
     }
   }
+  function getBoardHeaderStyle(isDraggingOver: boolean){
+    return {
+      height: typeof headerHeight === "undefined" ? 90 : headerHeight,
+      background: isDraggingOver ? "rgb(230,230,230)" : "rgb(250,250,250)"
+    }
+  };
+
   const lI = bc.columns.filter(col => !col.is_last).length;
   return (
     <div className="kb-board">
@@ -119,14 +126,7 @@ function KbBoard(props: IKanbanBoardProps){
 
         <div className="kb-body">
           <DragDropContext onDragEnd={onDragEnd}>
-            {bc.columns
-              .filter(col => !col.is_last)
-              .map((column, index) => <KbColumn _={column} key={column.id} i={index}/>)
-            }
-            {bc.columns
-              .filter(col => col.is_last)
-              .map((column, index) => <KbColumn _={column} key={column.id}  i={lI + index}/>)
-            }
+            {bc.columns.map((column, index) => <KbColumn _={column} key={column.id} i={index}/>)}
           </DragDropContext>
         </div>
       </div>

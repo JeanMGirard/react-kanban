@@ -11835,10 +11835,8 @@ var KanbanBoard = /** @class */ (function (_super) {
     return KanbanBoard;
 }(React__default.Component));
 // a little function to help us with reordering the result
-var getBoardHeaderStyle = function (isDraggingOver) { return ({
-    background: isDraggingOver ? "rgb(230,230,230)" : "rgb(250,250,250)"
-}); };
 function KbBoard(props) {
+    var headerHeight = props.headerHeight;
     var bc = React.useContext(BoardContext);
     function onDragEnd(result) {
         // dropped nowhere
@@ -11879,6 +11877,12 @@ function KbBoard(props) {
             bc.setColumns(newColumns);
         }
     }
+    function getBoardHeaderStyle(isDraggingOver) {
+        return {
+            height: typeof headerHeight === "undefined" ? 90 : headerHeight,
+            background: isDraggingOver ? "rgb(230,230,230)" : "rgb(250,250,250)"
+        };
+    }
     var lI = bc.columns.filter(function (col) { return !col.is_last; }).length;
     return (React__default.createElement("div", { className: "kb-board" },
         React__default.createElement("div", { className: "kb-scroll" },
@@ -11888,13 +11892,7 @@ function KbBoard(props) {
                         .map(function (column, index) { return (React__default.createElement(KbColumnDraggable, { _: column, key: column.id, i: index })); }),
                     provided.placeholder)); })),
             React__default.createElement("div", { className: "kb-body" },
-                React__default.createElement(DragDropContext, { onDragEnd: onDragEnd },
-                    bc.columns
-                        .filter(function (col) { return !col.is_last; })
-                        .map(function (column, index) { return React__default.createElement(KbColumn, { _: column, key: column.id, i: index }); }),
-                    bc.columns
-                        .filter(function (col) { return col.is_last; })
-                        .map(function (column, index) { return React__default.createElement(KbColumn, { _: column, key: column.id, i: lI + index }); }))))));
+                React__default.createElement(DragDropContext, { onDragEnd: onDragEnd }, bc.columns.map(function (column, index) { return React__default.createElement(KbColumn, { _: column, key: column.id, i: index }); }))))));
 }
 
 ___$insertStyle(".kb-card {\n  width: 100%;\n  box-sizing: border-box;\n  user-select: none;\n  padding: 3px;\n  margin: 0;\n}");
