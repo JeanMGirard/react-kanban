@@ -28,6 +28,11 @@ export class KanbanBoard extends React.Component<IKanbanBoardProps & IKanbanGlob
       </BoardContextProvider>
     )
   }
+  componentDidUpdate(prevProps: Readonly<IKanbanBoardProps & IKanbanGlobalProps>, prevState: Readonly<{}>, snapshot?: any): void {
+    if(prevProps.refresh !== this.props.refresh){
+      console.log("changed?");
+    }
+  }
 }
 
 

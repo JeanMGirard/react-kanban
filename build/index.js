@@ -11742,7 +11742,7 @@ var BoardContextProvider = /** @class */ (function (_super) {
         else if (prevProps.refresh !== this.props.refresh) {
             this.setState({
                 refresh: this.props.refresh,
-                columns: this.props.columns
+                columns: reorderColumnsByLast(this.props.columns)
             });
         }
     };
@@ -11831,6 +11831,11 @@ var KanbanBoard = /** @class */ (function (_super) {
         var _a = getGlobalProps(this.props), gProps = _a[0], otherProps = _a[1];
         return (React__default.createElement(BoardContextProvider, __assign({}, gProps),
             React__default.createElement(KbBoard, __assign({}, otherProps))));
+    };
+    KanbanBoard.prototype.componentDidUpdate = function (prevProps, prevState, snapshot) {
+        if (prevProps.refresh !== this.props.refresh) {
+            console.log("changed?");
+        }
     };
     return KanbanBoard;
 }(React__default.Component));

@@ -55,7 +55,7 @@ export class BoardContextProvider extends React.Component<IKanbanGlobalProps, IB
     else if(prevProps.refresh !== this.props.refresh){
       this.setState( {
         refresh: this.props.refresh,
-        columns: this.props.columns
+        columns: reorderColumnsByLast(this.props.columns)
       })
     }
   }

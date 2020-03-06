@@ -9,4 +9,5 @@ export interface IKanbanBoardProps {
 export declare class KanbanBoard extends React.Component<IKanbanBoardProps & IKanbanGlobalProps> {
     constructor(props: IKanbanBoardProps);
     render(): JSX.Element;
+    componentDidUpdate(prevProps: Readonly<IKanbanBoardProps & IKanbanGlobalProps>, prevState: Readonly<{}>, snapshot?: any): void;
 }

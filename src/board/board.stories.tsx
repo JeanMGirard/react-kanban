@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {text, withKnobs} from "@storybook/addon-knobs";
 import { KanbanBoard } from "./board";
 import { IKanbanColumn } from "../type";
@@ -17,7 +17,7 @@ const getItems = (count: number) =>
     id: `item-${k}`,
     content: `item ${k}`,
   }));
-const columns: IKanbanColumn[] = [
+let testColumns: IKanbanColumn[] = [
   { id: "col-1",
     // type: "",
     header: <div className="col-header">header-1</div>,
@@ -52,13 +52,6 @@ const columns: IKanbanColumn[] = [
       { id: "card-3-last", locked: true, is_last: true, elem: <div className="kaban-card">3-last</div> }
     ]
   },
-  { id: "col-4", // type: "",
-    header: <div className="col-header">header-4</div>,
-    cards: [
-      { id: "card-4-1", elem: <div className="kaban-card">4-1</div> },
-      { id: "card-4-2", elem: <div className="kaban-card">4-2</div> }
-    ]
-  },
   { id: "col-5", // type: "",
     header: <div className="col-header">header-5</div>,
     cards: [
@@ -75,18 +68,39 @@ const columns: IKanbanColumn[] = [
   }
 ];
 
+function BoardStory(props: any){
+  const [columns, setColumns] = useState(testColumns);
+  const [r, reload] = useState(0);
 
+  return (
+    <>
+      <button onClick={() => {
+        columns.push({ id: "col-4", // type: "",
+          header: <div className="col-header">header-4</div>,
+          cards: [
+            { id: "card-4-1", elem: <div className="kaban-card">4-1</div> },
+            { id: "card-4-2", elem: <div className="kaban-card">4-2</div> }
+          ]
+        });
+        setColumns(columns);
+        reload(r+1);
+      }}/>
+      <KanbanBoard columns={columns}
+                   headerHeight={70}
+                   refresh={r}
+                   onMoveCol={(col, index) => {return true;}}
+                   onMoveCard={(card, col1, col2) => { return true;}}
+                   canChangeCardColumn={true}/>
+    </>
+  )
+}
 
 export const boardContainer = () => (
+
   <div style={{
     padding: text("padding", "10px", "container")
   }}>
-    <KanbanBoard columns={columns}
-                 headerHeight={70}
-                 onMoveCol={(col, index) => {return true;}}
-                 onMoveCard={(card, col1, col2) => { return true;}}
-                 canChangeCardColumn={true}
-    />
+    <BoardStory/>
   </div>
 );
 boardContainer.story = {
