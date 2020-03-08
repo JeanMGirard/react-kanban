@@ -3,7 +3,7 @@ import React, {useContext, useState} from "react";
 import { Droppable } from "react-beautiful-dnd";
 import { KanbanCard } from "..";
 import { BoardContext } from "../context";
-import { IKanbanColumn } from "../type";
+import { IKanbanColumn, IBoardColumnProps } from "../type";
 
 import "./column.scss";
 
@@ -12,12 +12,9 @@ const getColumnBodyStyle = (isDraggingOver: boolean) => ({
 });
 
 
-export interface IBoardColumnProps extends React.HTMLProps<HTMLDivElement>{
-  _: IKanbanColumn,
-  i: number;
-}
+
 export function KbColumn(props: IBoardColumnProps){
-  const { _ } = props;
+  const { _, columnWidth } = props;
   const bc = useContext(BoardContext);
 
   const [type] = useState("CARD" +
@@ -25,7 +22,10 @@ export function KbColumn(props: IBoardColumnProps){
   );
 
   return (
-    <div className="kb-col-body">
+    <div className="kb-col-body"
+         style={{
+           width: typeof columnWidth === "undefined" ? 240 : columnWidth
+         }}>
       <div className="kb-col-scroll">
         <Droppable droppableId={_.id} type={type} direction="vertical">
           {(provided, snapshot) => (

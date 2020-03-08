@@ -11,7 +11,7 @@ export const getColumnHeaderStyle = (isDragging: boolean, draggableStyle: any) =
 });
 
 export function KbColumnDraggable(props: IBoardColumnProps){
-  const {_, i } = props;
+  const {_, i, columnWidth } = props;
 
   const noDrop = false; //_.locked && _.is_last;
 
@@ -22,7 +22,10 @@ export function KbColumnDraggable(props: IBoardColumnProps){
         {(provided: DraggableProvided, snapshot: DraggableStateSnapshot) => (
           <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}
                className="kb-col-header"
-               style={getColumnHeaderStyle(snapshot.isDragging, provided.draggableProps.style)}>
+               style={{
+                 width: typeof columnWidth === "undefined" ? 240 : columnWidth,
+                ...getColumnHeaderStyle(snapshot.isDragging, provided.draggableProps.style)
+               }}>
             <div className="kb-col-header-content">
               {_.header ? _.header : <div>You must put a "header" element</div>}
             </div>
@@ -31,7 +34,10 @@ export function KbColumnDraggable(props: IBoardColumnProps){
       </Draggable>
       }
       {noDrop &&
-      <div className="kb-col-header">
+      <div className="kb-col-header"
+           style={{
+             width: typeof columnWidth === "undefined" ? 240 : columnWidth
+           }}>
         <div className="kb-col-header-content">
           {_.header ? _.header : <div>You must put a "header" element</div>}
         </div>
@@ -39,31 +45,4 @@ export function KbColumnDraggable(props: IBoardColumnProps){
       }
     </>
   )
-/*
-  return (
-    <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}
-         className="kb-col" style={getColumnStyle(snapshot.isDragging, provided.draggableProps.style )}>
-      <div {...dragEscaping}>
-        <DragDropContext onDragEnd={onDragEnd} >
-          <Droppable droppableId={"kb-col-"+props.i.toString()} direction="vertical">
-            {(provided, snapshot) => (
-              <div ref={provided.innerRef}
-                   className="kb-col-body"
-                   placeholder="kb-col"
-                   style={getColumnBodyStyle(snapshot.isDraggingOver)}
-                   {...provided.droppableProps}>
-                {cards.map((card, index) => (
-                  <Draggable key={card.id} draggableId={card.id} index={index}>
-                    {(provided, snapshot) => <KanbanCard _={card} i={index} provided={provided} snapshot={snapshot}/>}
-                  </Draggable>
-                ))}
-                {provided.placeholder}
-              </div>
-            )}
-          </Droppable>
-        </DragDropContext>
-      </div>
-    </div>
-  )
-  */
 }

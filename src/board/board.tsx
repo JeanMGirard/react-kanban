@@ -15,6 +15,7 @@ import "./board.scss";
 export interface IKanbanBoardProps {
   columns: IKanbanColumn[];
   headerHeight?: number;
+  columnWidth?: number;
 }
 export class KanbanBoard extends React.Component<IKanbanBoardProps & IKanbanGlobalProps, any>{
   constructor(props: IKanbanBoardProps) {
@@ -53,7 +54,7 @@ const grid = 8;
 
 
 function KbBoard(props: IKanbanBoardProps){
-  const { headerHeight } = props;
+  const { headerHeight, columnWidth } = props;
   const bc = useContext(BoardContext);
 
   function onDragEnd(result: DropResult) {
@@ -128,7 +129,7 @@ function KbBoard(props: IKanbanBoardProps){
                    {...provided.droppableProps}>
                 {bc.columns
                   .map((column, index) => (
-                    <KbColumnDraggable _={column} key={column.id} i={index}/>
+                    <KbColumnDraggable _={column} key={column.id} i={index} columnWidth={columnWidth}/>
                   ))
                 }
                 {provided.placeholder}
@@ -139,7 +140,7 @@ function KbBoard(props: IKanbanBoardProps){
 
         <div className="kb-body">
           <DragDropContext onDragEnd={onDragEnd}>
-            {bc.columns.map((column, index) => <KbColumn _={column} key={column.id} i={index}/>)}
+            {bc.columns.map((column, index) => <KbColumn _={column} key={column.id} i={index} columnWidth={columnWidth}/>)}
           </DragDropContext>
         </div>
       </div>

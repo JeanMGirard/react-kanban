@@ -10,6 +10,7 @@ export interface IKanbanColumn {
 export interface IBoardColumnProps extends React.HTMLProps<HTMLDivElement> {
     _: IKanbanColumn;
     i: number;
+    columnWidth?: number;
 }
 export interface IKanbanCard {
     id: string;

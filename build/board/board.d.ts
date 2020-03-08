@@ -5,6 +5,7 @@ import "./board.scss";
 export interface IKanbanBoardProps {
     columns: IKanbanColumn[];
     headerHeight?: number;
+    columnWidth?: number;
 }
 export declare class KanbanBoard extends React.Component<IKanbanBoardProps & IKanbanGlobalProps, any> {
     constructor(props: IKanbanBoardProps);

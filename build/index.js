@@ -11755,17 +11755,19 @@ var BoardContextProvider = /** @class */ (function (_super) {
     return BoardContextProvider;
 }(React__default.Component));
 
-___$insertStyle(".kb-board .kb-col,\n.kb-board .kb-col-body,\n.kb-board .kb-col-header {\n  width: 240px;\n  box-sizing: border-box;\n}\n.kb-board .kb-col-header {\n  height: 100%;\n  display: inline-block;\n  position: relative;\n}\n.kb-board .kb-col-header .kb-col-header-content {\n  box-sizing: border-box;\n  position: absolute;\n  top: 0;\n  left: 0;\n  padding: 6px;\n  height: 100%;\n  width: 100%;\n}\n.kb-board .kb-col-body {\n  min-height: 100%;\n  display: inline-block;\n  position: relative;\n}\n.kb-board .kb-col-body .kb-col-drop {\n  min-height: 100%;\n  padding: 6px;\n  box-sizing: border-box;\n}\n.kb-board .kb-col-body .kb-col-scroll {\n  height: 100%;\n  position: absolute;\n  top: 0;\n  left: 0;\n  width: 100%;\n}\n\n.kb-board .kb-col {\n  height: 100%;\n  display: inline-block;\n}\n.kb-board .kb-col > div {\n  height: 100%;\n}");
+___$insertStyle(".kb-board .kb-col,\n.kb-board .kb-col-body,\n.kb-board .kb-col-header {\n  box-sizing: border-box;\n}\n.kb-board .kb-col-header {\n  height: 100%;\n  display: inline-block;\n  position: relative;\n}\n.kb-board .kb-col-header .kb-col-header-content {\n  box-sizing: border-box;\n  position: absolute;\n  top: 0;\n  left: 0;\n  padding: 6px;\n  height: 100%;\n  width: 100%;\n}\n.kb-board .kb-col-body {\n  min-height: 100%;\n  display: inline-block;\n  position: relative;\n}\n.kb-board .kb-col-body .kb-col-drop {\n  min-height: 100%;\n  padding: 6px;\n  box-sizing: border-box;\n}\n.kb-board .kb-col-body .kb-col-scroll {\n  height: 100%;\n  position: absolute;\n  top: 0;\n  left: 0;\n  width: 100%;\n}\n\n.kb-board .kb-col {\n  height: 100%;\n  display: inline-block;\n}\n.kb-board .kb-col > div {\n  height: 100%;\n}");
 
 var getColumnBodyStyle = function (isDraggingOver) { return ({
     background: isDraggingOver ? "rgba(230,230,230, 0.7)" : "rgba(250,250,250, 0.3)"
 }); };
 function KbColumn(props) {
-    var _ = props._;
+    var _ = props._, columnWidth = props.columnWidth;
     var bc = React.useContext(BoardContext);
     var type = React.useState("CARD" +
         (bc.canChangeCardColumn ? (_.type ? "-" + _.type : "") : "-" + _.id))[0];
-    return (React__default.createElement("div", { className: "kb-col-body" },
+    return (React__default.createElement("div", { className: "kb-col-body", style: {
+            width: typeof columnWidth === "undefined" ? 240 : columnWidth
+        } },
         React__default.createElement("div", { className: "kb-col-scroll" },
             React__default.createElement(ConnectedDroppable, { droppableId: _.id, type: type, direction: "vertical" }, function (provided, snapshot) { return (React__default.createElement("div", __assign({ ref: provided.innerRef, className: "kb-col-drop", style: getColumnBodyStyle(snapshot.isDraggingOver) }, provided.droppableProps),
                 _.cards
@@ -11779,40 +11781,13 @@ function KbColumn(props) {
 
 var getColumnHeaderStyle = function (isDragging, draggableStyle) { return (__assign({ margin: "0 0 0 0" }, draggableStyle)); };
 function KbColumnDraggable(props) {
-    var _ = props._, i = props.i;
+    var _ = props._, i = props.i, columnWidth = props.columnWidth;
     var noDrop = false; //_.locked && _.is_last;
     return (React__default.createElement(React__default.Fragment, null,
         
-            React__default.createElement(PublicDraggable, { draggableId: _.id, index: i, isDragDisabled: !!_.locked }, function (provided, snapshot) { return (React__default.createElement("div", __assign({ ref: provided.innerRef }, provided.draggableProps, provided.dragHandleProps, { className: "kb-col-header", style: getColumnHeaderStyle(snapshot.isDragging, provided.draggableProps.style) }),
+            React__default.createElement(PublicDraggable, { draggableId: _.id, index: i, isDragDisabled: !!_.locked }, function (provided, snapshot) { return (React__default.createElement("div", __assign({ ref: provided.innerRef }, provided.draggableProps, provided.dragHandleProps, { className: "kb-col-header", style: __assign({ width: typeof columnWidth === "undefined" ? 240 : columnWidth }, getColumnHeaderStyle(snapshot.isDragging, provided.draggableProps.style)) }),
                 React__default.createElement("div", { className: "kb-col-header-content" }, _.header ? _.header : React__default.createElement("div", null, "You must put a \"header\" element")))); }),
         noDrop ));
-    /*
-      return (
-        <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}
-             className="kb-col" style={getColumnStyle(snapshot.isDragging, provided.draggableProps.style )}>
-          <div {...dragEscaping}>
-            <DragDropContext onDragEnd={onDragEnd} >
-              <Droppable droppableId={"kb-col-"+props.i.toString()} direction="vertical">
-                {(provided, snapshot) => (
-                  <div ref={provided.innerRef}
-                       className="kb-col-body"
-                       placeholder="kb-col"
-                       style={getColumnBodyStyle(snapshot.isDraggingOver)}
-                       {...provided.droppableProps}>
-                    {cards.map((card, index) => (
-                      <Draggable key={card.id} draggableId={card.id} index={index}>
-                        {(provided, snapshot) => <KanbanCard _={card} i={index} provided={provided} snapshot={snapshot}/>}
-                      </Draggable>
-                    ))}
-                    {provided.placeholder}
-                  </div>
-                )}
-              </Droppable>
-            </DragDropContext>
-          </div>
-        </div>
-      )
-      */
 }
 
 var getGlobalProps = function (props) {
@@ -11820,7 +11795,7 @@ var getGlobalProps = function (props) {
     return [{ canChangeCardColumn: canChangeCardColumn, onMoveCard: onMoveCard, onMoveCol: onMoveCol, columns: columns }, otherProps];
 };
 
-___$insertStyle(".kb-board {\n  position: relative;\n  top: 0;\n  left: 0;\n  height: 100%;\n  width: 100%;\n  text-align: left;\n}\n\n.kb-board .kb-scroll {\n  position: absolute;\n  top: 0;\n  left: 0;\n  height: 100%;\n  width: 100%;\n  display: flex;\n  flex-direction: column;\n}\n\n.kb-board .kb-header, .kb-board .kb-body {\n  box-sizing: border-box;\n  white-space: nowrap;\n  float: left;\n  min-width: 100%;\n}\n.kb-board .kb-header,\n.kb-board .kb-header-lasts-locked {\n  height: 90px;\n  padding: 0;\n}\n.kb-board .kb-body {\n  flex-grow: 1;\n  display: block;\n}");
+___$insertStyle(".kb-board {\n  position: relative;\n  top: 0;\n  left: 0;\n  height: 100%;\n  width: 100%;\n  text-align: left;\n}\n\n.kb-board .kb-scroll {\n  position: absolute;\n  top: 0;\n  left: 0;\n  height: 100%;\n  width: 100%;\n  display: flex;\n  flex-direction: column;\n}\n\n.kb-board .kb-header, .kb-board .kb-body {\n  box-sizing: border-box;\n  white-space: nowrap;\n  float: left;\n  min-width: 100%;\n}\n.kb-board .kb-header,\n.kb-board .kb-header-lasts-locked {\n  padding: 0;\n}\n.kb-board .kb-body {\n  flex-grow: 1;\n  display: block;\n}");
 
 var KanbanBoard = /** @class */ (function (_super) {
     __extends(KanbanBoard, _super);
@@ -11850,7 +11825,7 @@ var KanbanBoard = /** @class */ (function (_super) {
 }(React__default.Component));
 // a little function to help us with reordering the result
 function KbBoard(props) {
-    var headerHeight = props.headerHeight;
+    var headerHeight = props.headerHeight, columnWidth = props.columnWidth;
     var bc = React.useContext(BoardContext);
     function onDragEnd(result) {
         // dropped nowhere
@@ -11903,10 +11878,10 @@ function KbBoard(props) {
             React__default.createElement(DragDropContext, { onDragEnd: onDragEnd },
                 React__default.createElement(ConnectedDroppable, { droppableId: "board", type: "COLUMN", direction: "horizontal", ignoreContainerClipping: false, isCombineEnabled: false }, function (provided, snapshot) { return (React__default.createElement("div", __assign({ ref: provided.innerRef, className: "kb-header", placeholder: "kb-header", style: getBoardHeaderStyle(snapshot.isDraggingOver) }, provided.droppableProps),
                     bc.columns
-                        .map(function (column, index) { return (React__default.createElement(KbColumnDraggable, { _: column, key: column.id, i: index })); }),
+                        .map(function (column, index) { return (React__default.createElement(KbColumnDraggable, { _: column, key: column.id, i: index, columnWidth: columnWidth })); }),
                     provided.placeholder)); })),
             React__default.createElement("div", { className: "kb-body" },
-                React__default.createElement(DragDropContext, { onDragEnd: onDragEnd }, bc.columns.map(function (column, index) { return React__default.createElement(KbColumn, { _: column, key: column.id, i: index }); }))))));
+                React__default.createElement(DragDropContext, { onDragEnd: onDragEnd }, bc.columns.map(function (column, index) { return React__default.createElement(KbColumn, { _: column, key: column.id, i: index, columnWidth: columnWidth }); }))))));
 }
 
 ___$insertStyle(".kb-card {\n  width: 100%;\n  box-sizing: border-box;\n  user-select: none;\n  padding: 3px;\n  margin: 0;\n}");

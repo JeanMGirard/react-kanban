@@ -5,7 +5,7 @@ export interface IKanbanGlobalProps {
   canChangeCardColumn?: boolean;
   columns: IKanbanColumn[];
   refresh?: number;
-  onMoveCard?(card: IKanbanCard, oldCol?: IKanbanColumn, newCol?: IKanbanColumn): boolean;
+  onMoveCard?(card: IKanbanCard, oldCol?: IKanbanColumn, newCol?: IKanbanColumn, destIndex?: Number): boolean;
   onMoveCol?(col: IKanbanColumn, index: number): boolean;
 }
 

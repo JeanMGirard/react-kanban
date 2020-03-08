@@ -4,6 +4,7 @@ import { KanbanBoard } from "./board";
 import { IKanbanColumn } from "../type";
 
 import "./board.stories.scss";
+import {KbColumnDraggable} from "../column/column-draggable";
 
 export default {
   title: 'Board',
@@ -86,10 +87,11 @@ function BoardStory(props: any){
         reload(r+1);
       }}/>
       <KanbanBoard columns={columns}
-                   headerHeight={70}
+                   headerHeight={50}
+                   columnWidth={180}
                    refresh={r}
                    onMoveCol={(col, index) => {return true;}}
-                   onMoveCard={(card, col1, col2) => { return true;}}
+                   onMoveCard={(card, col1, col2, dI) => { return true;}}
                    canChangeCardColumn={true}/>
     </>
   )
