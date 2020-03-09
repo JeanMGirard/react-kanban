@@ -1,4 +1,4 @@
-import React, {useContext, useState} from "react";
+import React, { useContext } from "react";
 import {DragDropContext, Droppable, DropResult, DraggableLocation} from 'react-beautiful-dnd';
 
 import {KbColumn } from "../column/column";
